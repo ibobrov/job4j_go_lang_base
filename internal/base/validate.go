@@ -9,11 +9,17 @@ type ValidateRequest struct {
 func Validate(req *ValidateRequest) []string {
 	res := make([]string, 0)
 	if req == nil {
-		res = append(res, "req is nil")
+		res = append(res, "ValidateRequest is nil")
 		return res
 	}
-	if req.UserID == "" || req.Description == "" || req.Title == "" {
-		res = append(res, "value is empty")
+	if req.UserID == "" {
+		res = append(res, "UserID is empty")
+	}
+	if req.Title == "" {
+		res = append(res, "Title is empty")
+	}
+	if req.Description == "" {
+		res = append(res, "Description is empty")
 	}
 	return res
 }
