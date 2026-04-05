@@ -18,8 +18,7 @@ func Test_Add(t *testing.T) {
 		rsl := tracker.GetItems()
 
 		assert.Equal(t, len(rsl), 1)
-		assert.Equal(t, rsl[0].ID, "id")
-		assert.Equal(t, rsl[0].Name, "name")
+		assert.Equal(t, Item{ID: "id", Name: "name"}, rsl[0])
 	})
 
 	t.Run("берем item из tracker, меняем имя, смотрим что вернет name", func(t *testing.T) {
@@ -32,7 +31,6 @@ func Test_Add(t *testing.T) {
 		tracker.GetItems()[0].Name = "new name"
 
 		assert.Equal(t, len(rsl), 1)
-		assert.Equal(t, rsl[0].ID, "id")
-		assert.Equal(t, rsl[0].Name, "name")
+		assert.Equal(t, Item{ID: "id", Name: "name"}, rsl[0])
 	})
 }
