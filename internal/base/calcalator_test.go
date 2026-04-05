@@ -15,7 +15,7 @@ func Test_Add(t *testing.T) {
 		rsl := base.Add(1, 2)
 		expected := 3
 
-		assert.Equal(t, rsl, expected)
+		assert.Equal(t, expected, rsl)
 	})
 
 	t.Run("2 + 2 = 4", func(t *testing.T) {
@@ -24,7 +24,7 @@ func Test_Add(t *testing.T) {
 		rsl := base.Add(2, 2)
 		expected := 4
 
-		assert.Equal(t, rsl, expected)
+		assert.Equal(t, expected, rsl)
 	})
 
 }
