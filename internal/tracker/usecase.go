@@ -12,7 +12,12 @@ func (u AddUseCase) Done(in Input, out Output, tracker *Tracker) {
 	out.Out("enter name:")
 	name := in.Get()
 	id := uuid.New().String()
-	tracker.AddItem(Item{Name: name, ID: id})
+	item, err := tracker.AddItem(Item{Name: name, ID: id})
+	if err == nil {
+		out.Out("item was added: " + item.toString())
+	} else {
+		out.Out(err.Error())
+	}
 }
 
 type GetUseCase struct{}
@@ -31,7 +36,12 @@ func (u UpdateUseCase) Done(in Input, out Output, tracker *Tracker) {
 
 	out.Out("enter new name:")
 	name := in.Get()
-	tracker.UpdateItem(id, Item{Name: name, ID: id})
+	err := tracker.UpdateItem(Item{Name: name, ID: id})
+	if err == nil {
+		out.Out("item was updated")
+	} else {
+		out.Out(err.Error())
+	}
 }
 
 type DeleteUseCase struct{}
