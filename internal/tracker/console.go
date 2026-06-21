@@ -12,7 +12,6 @@ type Input interface {
 
 type Output interface {
 	Out(text string)
-	OutActions(actions map[string]UseCase)
 	NewLine()
 	NotFoundAction()
 }
@@ -21,8 +20,8 @@ type ConsoleInput struct{}
 
 func (c ConsoleInput) Get() string {
 	scanner := bufio.NewScanner(os.Stdin)
-	if scanner.Scan() {
-		// block IO
+	if !scanner.Scan() {
+		return ""
 	}
 	return scanner.Text()
 }
@@ -31,15 +30,6 @@ type ConsoleOutput struct{}
 
 func (c ConsoleOutput) Out(text string) {
 	fmt.Println(text)
-}
-
-func (c ConsoleOutput) OutActions(actions map[string]UseCase) {
-	c.Out("---------------")
-	c.Out("Select action\n")
-	for i := range actions {
-		c.Out(i)
-	}
-	c.Out("exit\n")
 }
 
 func (c ConsoleOutput) NewLine() {

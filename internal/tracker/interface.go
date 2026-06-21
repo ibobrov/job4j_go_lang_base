@@ -6,6 +6,15 @@ type UI struct {
 	Tracker *Tracker
 }
 
+func (u UI) OutActions(actions map[string]UseCase) {
+	u.Out.Out("---------------")
+	u.Out.Out("Select action\n")
+	for i := range actions {
+		u.Out.Out(i)
+	}
+	u.Out.Out("exit\n")
+}
+
 func (u UI) Run() {
 	actions := map[string]UseCase{
 		"add":    AddUseCase{},
@@ -15,7 +24,7 @@ func (u UI) Run() {
 	}
 
 	for {
-		u.Out.OutActions(actions)
+		u.OutActions(actions)
 		selected := u.In.Get()
 
 		if selected == "exit" {
