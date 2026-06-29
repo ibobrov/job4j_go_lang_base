@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"job4j.ru/go-lang-base/internal/tracker"
+	"job4j.ru/go-lang-base/internal/domain"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -17,28 +17,28 @@ func NewRepoPg(pool *pgxpool.Pool) *RepoPg {
 	return &RepoPg{pool: pool}
 }
 
-func (r *RepoPg) Create(ctx context.Context, it tracker.Item) error {
+func (r *RepoPg) Create(ctx context.Context, it domain.Item) (domain.Item, error) {
 	_, err := r.pool.Exec(
 		ctx,
 		`insert into items(id, name) values($1, $2)`,
 		it.ID, it.Name,
 	)
 	if err != nil {
-		return fmt.Errorf("r.pool.Exec: %w", err)
+		return domain.Item{}, fmt.Errorf("r.pool.Exec: %w", err)
 	}
-	return nil
+	return it, nil
 }
 
-func (r *RepoPg) List(ctx context.Context) ([]tracker.Item, error) {
+func (r *RepoPg) List(ctx context.Context) ([]domain.Item, error) {
 	rows, err := r.pool.Query(ctx, `select id, name from items`)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var items []tracker.Item
+	var items []domain.Item
 	for rows.Next() {
-		var item tracker.Item
+		var item domain.Item
 		if err := rows.Scan(&item.ID, &item.Name); err != nil {
 			return nil, err
 		}
@@ -52,8 +52,8 @@ func (r *RepoPg) List(ctx context.Context) ([]tracker.Item, error) {
 	return items, nil
 }
 
-func (r *RepoPg) Get(ctx context.Context, id string) (tracker.Item, error) {
-	var it tracker.Item
+func (r *RepoPg) Get(ctx context.Context, id string) (domain.Item, error) {
+	var it domain.Item
 	err := r.pool.QueryRow(
 		ctx,
 		`select id, name from items where id = $1`,
