@@ -1,0 +1,86 @@
+basePath: /api
+definitions:
+  api.CreateItemRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  api.CreateItemResponse:
+    properties:
+      newItem:
+        $ref: '#/definitions/domain.Item'
+    type: object
+  api.ErrorResponse:
+    properties:
+      message:
+        example: name is required
+        type: string
+    type: object
+  api.GetItemsResponse:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/api.ItemRequest'
+        type: array
+    type: object
+  api.ItemRequest:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  domain.Item:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API для учебного tracker-сервера на Go + Fiber.
+  title: Tracker API
+  version: "1.0"
+paths:
+  /item:
+    post:
+      consumes:
+      - application/json
+      description: Создает новую задачу
+      parameters:
+      - description: Данные задачи
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api.CreateItemRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/api.CreateItemResponse'
+        "400":
+          description: Некорректный запрос
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Создать задачу
+      tags:
+      - Items
+  /items:
+    get:
+      description: Возвращает все задачи
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.GetItemsResponse'
+      summary: Получить список задач
+      tags:
+      - Items
+swagger: "2.0"
