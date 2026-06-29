@@ -1,8 +1,9 @@
 package tracker
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_Add(t *testing.T) {
@@ -34,5 +35,31 @@ func Test_Add(t *testing.T) {
 		assert.Equal(t, len(rsl), 1)
 		assert.Equal(t, rsl[0].ID, "id")
 		assert.Equal(t, rsl[0].Name, "name")
+	})
+
+	t.Run("добавляем item в tracker, изменяем item, смотрим что вернет name", func(t *testing.T) {
+		t.Parallel()
+
+		item := Item{ID: "id", Name: "name"}
+		tracker := NewTracker()
+		tracker.AddItem(item)
+		tracker.UpdateItem(item.ID, Item{ID: "id", Name: "name2"})
+		rsl := tracker.GetItems()
+
+		assert.Equal(t, len(rsl), 1)
+		assert.Equal(t, rsl[0].ID, "id")
+		assert.Equal(t, rsl[0].Name, "name2")
+	})
+
+	t.Run("добавляем item в tracker, удаляем item, смотрим что вернет name", func(t *testing.T) {
+		t.Parallel()
+
+		item := Item{ID: "id", Name: "name"}
+		tracker := NewTracker()
+		tracker.AddItem(item)
+		tracker.DeleteItem(item.ID)
+		rsl := tracker.GetItems()
+
+		assert.Equal(t, len(rsl), 0)
 	})
 }
