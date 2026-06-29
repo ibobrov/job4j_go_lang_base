@@ -25,7 +25,10 @@ func (u UI) Run() {
 
 	for {
 		u.OutActions(actions)
-		selected := u.In.Get()
+		selected, err := u.In.Get()
+		if err != nil {
+			u.Out.Out("Wrong input!")
+		}
 
 		if selected == "exit" {
 			break

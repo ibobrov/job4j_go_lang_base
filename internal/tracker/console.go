@@ -7,7 +7,7 @@ import (
 )
 
 type Input interface {
-	Get() string
+	Get() (string, error)
 }
 
 type Output interface {
@@ -18,12 +18,15 @@ type Output interface {
 
 type ConsoleInput struct{}
 
-func (c ConsoleInput) Get() string {
+func (c ConsoleInput) Get() (string, error) {
 	scanner := bufio.NewScanner(os.Stdin)
 	if !scanner.Scan() {
-		return ""
+		if err := scanner.Err(); err != nil {
+			return "", err
+		}
+		return "", nil
 	}
-	return scanner.Text()
+	return scanner.Text(), nil
 }
 
 type ConsoleOutput struct{}
